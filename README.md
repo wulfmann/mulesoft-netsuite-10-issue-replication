@@ -2,6 +2,11 @@
 
 This repo has an example project that shows an issue with the `10.0.x` Netsuite Connector.
 
+This is a freshly created project from anypoint studio.
+
+- Anypoint Studio Version: 7.6
+- Mule Runtime Version: 4.3.0 EE
+
 ## The error:
 
 ```text
