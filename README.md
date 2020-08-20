@@ -31,7 +31,7 @@ output application/java
 				customLabel: "Stage"
 			}]
 		}
-	},
+	}
 } as Object {
 	class : "org.mule.module.netsuite.extension.api.CustomerSearchAdvanced"
 }</ee:set-payload>
@@ -50,3 +50,8 @@ This issue is not present in `9.x` Netsuite Connector Versions.
 
 Make sure you add your netsuite token credentials to the `src/main/resources/application-dev.properties` file.
 
+## Example Request
+
+```
+GET http://localhost:8081/test
+```
