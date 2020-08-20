@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="67c47836-3589-4151-ac02-c305aa9f2df9" file="application-dev.properties" />
+
+	<netsuite:config name="NetSuite_Config" doc:name="NetSuite Config" doc:id="d2310469-b15f-4936-b814-60906e14e7c4" >
+		<netsuite:token-authentication-connection consumerKey="${netsuite.consumer_key}" consumerSecret="${netsuite.consumer_secret}" tokenId="${netsuite.token_id}" tokenSecret="${netsuite.token_secret}" account="${netsuite.account}" />
+	</netsuite:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7646b081-10d4-42db-9b37-55435f5b9552" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="ns-searchFlow" doc:id="579d2926-f1fa-4005-994d-c2a54f5267c8" >
+		<http:listener doc:name="Listener" doc:id="b4f2345b-f58b-48d3-84a2-580d0539fbe6" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Transform Message" doc:id="46e4669e-a938-496b-badd-1bfb40016706" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	columns: {
+		basic: {
+			dateCreated: [{
+				customLabel: "Created"
+			}],
+			entityId: [{
+				customLabel: "Entity Id"
+			}],
+			stage: [{
+				customLabel: "Stage"
+			}]
+		}
+	},
+} as Object {
+	class : "org.mule.module.netsuite.extension.api.CustomerSearchAdvanced"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<netsuite:search doc:name="Search" doc:id="5a15834b-d7c9-43ef-8ed0-84fd63bb8150" config-ref="NetSuite_Config" key="CUSTOMER_ADVANCED" pageSize="10"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7de6d41b-609c-4d18-a1e5-7d4dc446684d" />
+	</flow>
+</mule>
