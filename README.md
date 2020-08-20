@@ -7,6 +7,8 @@ This is a freshly created project from anypoint studio.
 - Anypoint Studio Version: 7.6
 - Mule Runtime Version: 4.3.0 EE
 
+The code comes from [this mulesoft article](https://docs.mulesoft.com/netsuite-connector/10.0/netsuite-examples#customer-advanced-search).
+
 ## The error:
 
 ```text
